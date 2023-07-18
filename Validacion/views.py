@@ -6,6 +6,12 @@ from rest_framework import status
 from rest_framework.response import Response
 from .models import UsuarioTareas, GruposUsuarioTareas
 from .forms import GruposUsuarioTareasForm, UsuarioTareasForm
+
+import environ
+
+env = environ.Env()
+environ.Env.read_env(env_file='config/.env.production')
+
 # Login
 ###########################################################################
 
@@ -92,12 +98,12 @@ def tarea_list(request):
     grupo_id = usuario_tareas.first().grupo_id
     usuarios = UsuarioTareas.objects.filter(grupo_id=grupo_id)
     # Realizar una solicitud GET al API para obtener las tareas del usuario actual
-    response = requests.get('http://localhost:8001/tareas/', headers={'Authorization': f'Token {token}'}, params={'usuario': user_id})
+    response = requests.get(env("API_Link")+'tareas/', headers={'Authorization': f'Token {token}'}, params={'usuario': user_id})
 
     # Obtener la lista de tareas del cuerpo de la respuesta
     tareas = response.json()
     
-    response2 = requests.get('http://localhost:8001/tareas/asignadas/', headers={'Authorization': f'Token {token}'}, params={'usuario': user_id})
+    response2 = requests.get(env("API_Link")+'tareas/asignadas/', headers={'Authorization': f'Token {token}'}, params={'usuario': user_id})
     tareas_asig = response2.json()
     
     # response3 = requests.get('http://localhost:8001/tareas/listasignadas/{user_id}/', headers={'Authorization': f'Token {token}'}, params={'usuario': user_id})
@@ -120,7 +126,7 @@ def crear_tarea(request):
         
         print(usuario_tareas_id)
         # Lógica para consumir la API y crear la nueva tarea
-        url = 'http://localhost:8001/tareas/'
+        url = env("API_Link")+'tareas/'
         nueva_tarea = {
             'nombre': nombre,
             'descripcion': descripcion,
@@ -153,7 +159,7 @@ def asignar_tarea(request):
     
     
     # Las tareas
-    response = requests.get('http://localhost:8001/tareas/', headers={'Authorization': f'Token {token}'}, params={'usuario': user_id})
+    response = requests.get(env("API_Link")+'tareas/', headers={'Authorization': f'Token {token}'}, params={'usuario': user_id})
 
     # Obtener la lista de tareas del cuerpo de la respuesta
     tareas = response.json()
@@ -170,7 +176,7 @@ def asignar_tarea(request):
         asignado_a_id = request.POST.get('asignado_a')
         
         # Lógica para consumir la API y crear la nueva tarea
-        url = 'http://localhost:8001/tareas/asignadas/'
+        url = env("API_Link")+'tareas/asignadas/'
         nueva_asignacion = {
             'mensaje': mensaje,
             'tarea': tarea_id,
@@ -194,7 +200,7 @@ def tarea_edit(request, tarea_id):
     token = request.COOKIES.get('tu_token_de_autenticacion')
 
     # Obtener la tarea específica utilizando el ID proporcionado
-    response = requests.get(f'http://localhost:8001/tareas/{tarea_id}/', headers={'Authorization': f'Token {token}'})
+    response = requests.get(env("API_Link")+f'tareas/{tarea_id}/', headers={'Authorization': f'Token {token}'})
     tarea = response.json()
 
     # Renderizar el formulario de edición de la tarea
@@ -210,7 +216,7 @@ def tarea_update(request, tarea_id):
     fecha_limite = request.POST.get('fecha_limite')
 
     # Realizar una solicitud GET al API para obtener la tarea específica
-    response_get = requests.get(f'http://localhost:8001/tareas/{tarea_id}/', headers={'Authorization': f'Token {token}'})
+    response_get = requests.get(env("API_Link")+f'tareas/{tarea_id}/', headers={'Authorization': f'Token {token}'})
     tarea = response_get.json()
 
     # Actualizar los datos de la tarea con los valores del formulario
@@ -219,7 +225,7 @@ def tarea_update(request, tarea_id):
     tarea['fecha_limite'] = fecha_limite
 
     # Realizar una solicitud PUT al API para actualizar la tarea
-    response_put = requests.put(f'http://localhost:8001/tareas/{tarea_id}/', headers={'Authorization': f'Token {token}'}, data=tarea)
+    response_put = requests.put(env("API_Link")+f'tareas/{tarea_id}/', headers={'Authorization': f'Token {token}'}, data=tarea)
 
     # Redireccionar a la lista de tareas después de la actualización
     return redirect('tarea-list')
@@ -229,7 +235,7 @@ def tarea_delete(request, tarea_id):
     token = request.COOKIES.get('tu_token_de_autenticacion')
 
     # Realizar una solicitud DELETE al API para eliminar la tarea
-    response = requests.delete(f'http://localhost:8001/tareas/{tarea_id}/', headers={'Authorization': f'Token {token}'})
+    response = requests.delete(env("API_Link")+f'tareas/{tarea_id}/', headers={'Authorization': f'Token {token}'})
 
     # Redireccionar a la lista de tareas después de la eliminación
     return redirect('tarea-list')
