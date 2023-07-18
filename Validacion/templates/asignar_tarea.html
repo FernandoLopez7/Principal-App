@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Asignar Tarea</title>
+</head>
+
+<body>
+    <h1>Asignar Tarea</h1>
+    <!-- asignar_tarea.html -->
+    <form method="post" action="{% url 'asignar_tarea' %}">
+        {% csrf_token %}
+        <label for="mensaje">Mensaje:</label>
+        <input type="text" id="mensaje" name="mensaje" required><br>
+        <label for="tarea">Tarea:</label>
+        <select id="tarea" name="tarea" required>
+            {% for tarea in tareas %}
+            <option value="{{ tarea.id }}">{{ tarea.nombre }}</option>
+            {% endfor %}
+        </select><br>
+        <label for="asignado_a">Asignado a:</label>
+        <select id="asignado_a" name="asignado_a" required>
+            {% for usuario in usuarios %}
+            <option value="{{ usuario.id }}">{{ usuario.user.username }}</option>
+            {% endfor %}
+        </select><br>
+        <input type="submit" value="Asignar Tarea">
+    </form>
+
+</body>
+
+</html>

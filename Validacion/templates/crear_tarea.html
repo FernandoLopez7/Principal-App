@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Crear Tarea</title>
+</head>
+
+<body>
+    <h1>Crear Tarea</h1>
+    <!-- crear_tarea.html -->
+    <form method="post" action="{% url 'crear_tarea' %}">
+        {% csrf_token %}
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br>
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" name="descripcion" required></textarea><br>
+        <label for="fecha_limite">Fecha Límite:</label>
+        <input type="date" id="fecha_limite" name="fecha_limite" required><br>
+        <input type="submit" value="Crear Tarea">
+    </form>
+
+</body>
+
+</html>

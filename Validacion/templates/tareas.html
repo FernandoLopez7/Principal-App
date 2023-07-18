@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Lista de Tareas</title>
+</head>
+
+<body>
+    <a href="{% url 'logout' %}">Salir</a>
+
+    <h2>Grupos</h2>
+    <a href="{% url 'grupos-create' %}">Crear Grupo</a>
+    <ul>
+        {% for grupo in grupos %}
+        <li>{{ grupo.nombre }}</li>
+        <a href="{% url 'grupos-update' grupo.id %}">Actualizar</a>
+        {% endfor %}
+    </ul>
+
+    <h2>Usuarios</h2>
+    <ul>
+        {% for usuario in usuarios %}
+        <li>{{ usuario.user.username }}</li>
+        <a href="{% url 'usuario-update' usuario.user.id %}">Actualizar Usuario</a>
+        {% endfor %}
+    </ul>
+
+    <h1>Lista de Tareas</h1>
+    <a href="{% url 'crear_tarea' %}">Crear Tarea</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Fecha de Creación</th>
+                <th>Fecha Límite</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tarea in tareas %}
+            <tr>
+                <td>{{ tarea.nombre }}</td>
+                <td>{{ tarea.descripcion }}</td>
+                <td>{{ tarea.fecha_creacion }}</td>
+                <td>{{ tarea.fecha_limite }}</td>
+                <td>
+                    <a href="{% url 'tarea-edit' tarea.id %}">Editar</a>
+                    <a href="{% url 'tarea-delete' tarea.id %}">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'asignar_tarea' %}">Asignar Tarea</a>
+
+    <h1>Tareas Asignadas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Mensaje</th>
+                <th>Nombre de la tarea</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tarea in tareas_asig %}
+            <tr>
+                <td>{{ tarea.mensaje }}</td>
+                <td>{{ tarea.nombre }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+
+</html>

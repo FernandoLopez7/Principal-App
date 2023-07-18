@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Actualizar Usuario de Tareas</title>
+</head>
+<body>
+    <h2>Actualizar Usuario de Tareas</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+    </form>
+</body>
+</html>

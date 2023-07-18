@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Register</title>
+</head>
+
+<body>
+    <h2>Register</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <label for="id_grupo">Grupo:</label>
+        <select name="grupo" id="id_grupo">
+            {% for grupo in grupos %}
+            <option value="{{ grupo.id }}">{{ grupo.nombre }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Register</button>
+    </form>
+</body>
+
+</html>

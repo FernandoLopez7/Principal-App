@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Tarea</title>
+</head>
+<body>
+    <h1>Editar Tarea</h1>
+    <form method="POST" action="{% url 'tarea-update' tarea.id %}">
+        {% csrf_token %}
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" value="{{ tarea.nombre }}" required><br>
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" name="descripcion" required>{{ tarea.descripcion }}</textarea><br>
+        <label for="fecha_limite">Fecha Límite:</label>
+        <input type="date" id="fecha_limite" name="fecha_limite" value="{{ tarea.fecha_limite }}" required><br>
+        <input type="submit" value="Actualizar Tarea">
+    </form>
+</body>
+</html>
