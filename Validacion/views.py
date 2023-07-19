@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from .models import UsuarioTareas, GruposUsuarioTareas
 from .forms import GruposUsuarioTareasForm, UsuarioTareasForm
-
+from django.contrib.auth.decorators import login_required
 import environ
 
 env = environ.Env()
@@ -51,7 +51,7 @@ def logout_view(request):
 
 # Group
 ###########################################################################
-
+@login_required
 def grupos_create(request):
     if request.method == 'POST':
         form = GruposUsuarioTareasForm(request.POST)
@@ -61,7 +61,7 @@ def grupos_create(request):
     else:
         form = GruposUsuarioTareasForm()
     return render(request, 'grupo_create.html', {'form': form})
-
+@login_required
 def grupos_update(request, grupo_id):
     grupo = GruposUsuarioTareas.objects.get(id=grupo_id)
     if request.method == 'POST':
@@ -72,7 +72,7 @@ def grupos_update(request, grupo_id):
     else:
         form = GruposUsuarioTareasForm(instance=grupo)
     return render(request, 'grupo_update.html', {'form': form})
-
+@login_required
 def usuario_update(request, usuario_id):
     usuario = UsuarioTareas.objects.get(user_id=usuario_id)
     if request.method == 'POST':
@@ -86,7 +86,7 @@ def usuario_update(request, usuario_id):
 
 # API
 ###########################################################################
-
+@login_required
 def tarea_list(request):
     grupos = GruposUsuarioTareas.objects.all()
     # Obtener el token de autenticación del usuario actual
@@ -109,6 +109,7 @@ def tarea_list(request):
     # Renderizar la plantilla con la lista de tareas
     return render(request, 'tareas.html', {'tareas': tareas, 'grupos': grupos, 'usuarios': usuarios, 'tareas_asig': tareas_asig})
 
+@login_required
 def crear_tarea(request):
     if request.method == 'POST':
         # Obtener los datos de la nueva tarea del formulario enviado por el usuario
@@ -142,6 +143,7 @@ def crear_tarea(request):
 
     return render(request, 'crear_tarea.html')
 
+@login_required
 def asignar_tarea(request):
     token = request.COOKIES.get('tu_token_de_autenticacion')
     
@@ -191,6 +193,7 @@ def asignar_tarea(request):
 
     return render(request, 'asignar_tarea.html', context)
 
+@login_required
 def tarea_edit(request, tarea_id):
     # Obtener el token de autenticación del usuario actual
     token = request.COOKIES.get('tu_token_de_autenticacion')
@@ -202,6 +205,7 @@ def tarea_edit(request, tarea_id):
     # Renderizar el formulario de edición de la tarea
     return render(request, 'tarea_edit.html', {'tarea': tarea})
 
+@login_required
 def tarea_update(request, tarea_id):
     # Obtener el token de autenticación del usuario actual
     token = request.COOKIES.get('tu_token_de_autenticacion')
@@ -226,6 +230,7 @@ def tarea_update(request, tarea_id):
     # Redireccionar a la lista de tareas después de la actualización
     return redirect('tarea-list')
 
+@login_required
 def tarea_delete(request, tarea_id):
     # Obtener el token de autenticación del usuario actual
     token = request.COOKIES.get('tu_token_de_autenticacion')
@@ -236,7 +241,7 @@ def tarea_delete(request, tarea_id):
     # Redireccionar a la lista de tareas después de la eliminación
     return redirect('tarea-list')
 
-
+@login_required
 def asginar_tarea_delete(request, asignar_tarea_id):
     # Obtener el token de autenticación del usuario actual
     token = request.COOKIES.get('tu_token_de_autenticacion')
