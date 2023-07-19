@@ -15,4 +15,5 @@ urlpatterns = [
     path('grupos/update/<int:grupo_id>/', views.grupos_update, name='grupos-update'),
     path('usuario/update/<int:usuario_id>/', views.usuario_update, name='usuario-update'),
     path('tareas/asignar/', views.asignar_tarea, name='asignar_tarea'),
+    path('tareas/asignar/<int:asignar_tarea_id>/delete/', views.asginar_tarea_delete, name='asignar-tarea-delete'),
 ]

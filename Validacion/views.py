@@ -106,10 +106,6 @@ def tarea_list(request):
     response2 = requests.get(env("API_Link")+'tareas/asignadas/', headers={'Authorization': f'Token {token}'}, params={'usuario': user_id})
     tareas_asig = response2.json()
     
-    # response3 = requests.get('http://localhost:8001/tareas/listasignadas/{user_id}/', headers={'Authorization': f'Token {token}'}, params={'usuario': user_id})
-    # tareas_asig_use = response3.json()
-    # print(tareas_asig_use)
-    
     # Renderizar la plantilla con la lista de tareas
     return render(request, 'tareas.html', {'tareas': tareas, 'grupos': grupos, 'usuarios': usuarios, 'tareas_asig': tareas_asig})
 
@@ -236,6 +232,17 @@ def tarea_delete(request, tarea_id):
 
     # Realizar una solicitud DELETE al API para eliminar la tarea
     response = requests.delete(env("API_Link")+f'tareas/{tarea_id}/', headers={'Authorization': f'Token {token}'})
+
+    # Redireccionar a la lista de tareas después de la eliminación
+    return redirect('tarea-list')
+
+
+def asginar_tarea_delete(request, asignar_tarea_id):
+    # Obtener el token de autenticación del usuario actual
+    token = request.COOKIES.get('tu_token_de_autenticacion')
+
+    # Realizar una solicitud DELETE al API para eliminar la tarea
+    response = requests.delete(env("API_Link")+f'tareas/asignadas/{asignar_tarea_id}/', headers={'Authorization': f'Token {token}'})
 
     # Redireccionar a la lista de tareas después de la eliminación
     return redirect('tarea-list')
